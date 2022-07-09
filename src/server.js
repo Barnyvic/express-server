@@ -17,5 +17,5 @@ app.use(require("./routes/user.router"));
 const port = process.env.PORT || 3000;
 // starting the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`.blue.inverse.bold);
 });

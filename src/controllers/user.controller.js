@@ -1,7 +1,5 @@
 const User = require("../models/usermodule");
 
-const NewYear = [];
-
 // Creating a new user
 const createUser = async (req, res) => {
   const user = new User(req.body);
@@ -14,12 +12,47 @@ const createUser = async (req, res) => {
   }
 };
 
-//Creating a new user
-const allUsers = (req, res) => {
-  const newuser = req.body;
-  NewYear.push(newuser);
-  res.send(NewYear);
-  console.log(NewYear);
+//Getting  all user
+const allUsers = async (req, res) => {
+  try {
+    const users = await (
+      await User.find()
+    ).map((user) => {
+      return {
+        id: user._id,
+        Name: user.firstName.concat(" ", user.lastName),
+        Age: user.age,
+        Email: user.email,
+      };
+    });
+    res.send(users);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
-module.exports = { allUsers, createUser };
+// deleting a user
+
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+// Updating a user
+
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+module.exports = { allUsers, createUser, deleteUser, updateUser };

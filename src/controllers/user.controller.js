@@ -31,12 +31,22 @@ const allUsers = async (req, res) => {
   }
 };
 
+// geting one user by id
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 // deleting a user
 
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
-    res.send(user);
+    res.send(`${user} has been deleted`);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -46,13 +56,12 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.send(user);
+    const user = await User.findByIdAndUpdate(req.params.id, req.body);
+    res.send(`${user} has been updated`);
+    console.log(`this user has been updated: ${user}`);
   } catch (error) {
     res.status(400).send(error);
   }
 };
 
-module.exports = { allUsers, createUser, deleteUser, updateUser };
+module.exports = { allUsers, createUser, deleteUser, updateUser, getUser };
